@@ -9,7 +9,7 @@ BDK_iRWR_GeneScore <- function(NewNetwork,prior_score,restart_p,damping,epsilon 
   
   for (i in 1:ncol(AdjMat)){ 
     if (trans_degree_colsum[i]!=0){
-      trans_Mat[,i] = trans_degree[,i]/trans_degree_colsum[i]
+      trans_Mat[,i] = 0.85*(trans_degree[,i]/trans_degree_colsum[i]) + 0.15*(1/nrow(AdjMat))
     }
     else {
       trans_Mat[,i]=matrix(1/nrow(AdjMat),nrow(AdjMat),1)
@@ -28,7 +28,7 @@ BDK_iRWR_GeneScore <- function(NewNetwork,prior_score,restart_p,damping,epsilon 
     wucha = sqrt(sum((node_score_t - node_score_norm)^2))
     node_score_norm = node_score_t
     message(paste("the",k,"th iteration"))
-    if(wucha<=epsilon) break
+    if(wucha <= epsilon) break
 	
   }
   node_score = (node_score_t - min(node_score_t))/(max(node_score_t) - min(node_score_t))

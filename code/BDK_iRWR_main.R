@@ -33,18 +33,14 @@ BDK_iRWR_main <- function(network,mutation,tum_exp,seeds,root_path,damping){
   tum_exp_mean_i = as.matrix(apply(tum_exp_i,1,mean))
   tum_exp_mean_norm_i = normalization(tum_exp_mean_i)
   network_i = network[rownames(bet_katz_seeds),rownames(bet_katz_seeds)]
+  re_prob = bet_katz_seeds
+  diff_co_PPI_seeds_S = BDK_iRWR_GeneScore(network_i,tum_exp_mean_norm_i,re_prob,damping,epsilon = 1e-8,maxit=1000)
   
-  diff_co_PPI_seeds_S = BDK_iRWR_GeneScore(network_i,tum_exp_mean_norm_i,bet_katz_seeds,damping,epsilon = 1e-8,maxit=1000)
-  
-  ###  calculate the mutation frequency score
-  Mut_Fre_Score = MutFreScore(mutation)
-  intg = intersect(names(Mut_Fre_Score),rownames(diff_co_PPI_seeds_S))
-  
-  ### integrate the RWR score and freqency score
-  RWR_Fre_score_n = normalization(Mut_Fre_Score[intg] + diff_co_PPI_seeds_S[intg,])
-  RWR_Fre_score_rank = RWR_Fre_score_n[order(RWR_Fre_score_n,decreasing = T)]
-  return(RWR_Fre_score_rank)
+  mut_sum = rowSums(mutation)
+  mut_genes = rownames(mutation)[which(mut_sum > 0)]
+  mut_RWR_genes_i = intersect(mut_genes,rownames(diff_co_PPI_seeds_S))
+  RWR_mut_score_n = normalization(diff_co_PPI_seeds_S[mut_RWR_genes_i,])
+  RWR_mut_score_rank = RWR_mut_score_n[order(RWR_mut_score_n,decreasing = T)]
+  return(RWR_mut_score_rank)
 }
-
-
 
