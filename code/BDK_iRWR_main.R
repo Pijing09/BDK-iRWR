@@ -40,7 +40,7 @@ Driver_IRWR_main <- function(network,mutation,tum_exp,seeds,root_path,damping){
   mut_genes <- rownames(mutation)[which(mut_sum > 0)]
   mut_IRW_genes_i <- intersect(mut_genes,rownames(diff_co_PPI_seeds_S))
   IRW_mut_score_n <- normalization(diff_co_PPI_seeds_S[mut_IRW_genes_i,])
-  IWR_mut_score_rank <- IRW_mut_score_n[order(IRW_mut_score_n,decreasing = T)]
-  return(IWR_mut_score_rank)
+  IRW_mut_score_rank <- IRW_mut_score_n[order(IRW_mut_score_n,decreasing = T)]
+  return(IRW_mut_score_rank)
 }
 
